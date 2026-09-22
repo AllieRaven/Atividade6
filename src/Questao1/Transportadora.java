@@ -2,20 +2,33 @@ package Questao1;
 
 import Questao1.Entregas.TipoEntrega;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Transportadora {
 
-    private static final Scanner scanner = new Scanner(System.in);
-    private static final Pedido[] pedidos = new Pedido[100];
-    private static int quantidadePedidos = 0;
+    private List<Pedido> pedidos;
+    private Scanner scanner;
 
-    public static void menu() {
+    public Transportadora() {
+        pedidos = new ArrayList<>();
+        scanner = new Scanner(System.in);
+    }
+
+    public void menu() {
 
         int opcao;
 
         do {
-            exibirMenu();
+            System.out.println("\n===== TRANSPORTADORA =====");
+            System.out.println("1 - Cadastrar pedido");
+            System.out.println("2 - Listar pedidos");
+            System.out.println("3 - Calcular frete");
+            System.out.println("4 - Imprimir resumo");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha: ");
+
             opcao = scanner.nextInt();
             scanner.nextLine();
 
@@ -36,7 +49,7 @@ public class Transportadora {
                     imprimirResumo();
                     break;
 
-                case 5:
+                case 0:
                     System.out.println("Encerrando...");
                     break;
 
@@ -44,29 +57,12 @@ public class Transportadora {
                     System.out.println("Opção inválida!");
             }
 
-        } while (opcao != 5);
-
-        scanner.close();
+        } while (opcao != 0);
     }
 
-    private static void exibirMenu() {
-        System.out.println("\n===== TRANSPORTADORA =====");
-        System.out.println("1 - Cadastrar pedido");
-        System.out.println("2 - Listar pedidos");
-        System.out.println("3 - Calcular frete");
-        System.out.println("4 - Imprimir resumo");
-        System.out.println("5 - Sair");
-        System.out.print("Escolha uma opção: ");
-    }
+    private void cadastrarPedido() {
 
-    private static void cadastrarPedido() {
-
-        if (quantidadePedidos >= pedidos.length) {
-            System.out.println("Limite de pedidos atingido!");
-            return;
-        }
-
-        System.out.println("\n===== NOVO PEDIDO =====");
+        System.out.println("\n===== CADASTRAR PEDIDO =====");
 
         System.out.print("Destinatário: ");
         String destinatario = scanner.nextLine();
@@ -74,45 +70,76 @@ public class Transportadora {
         System.out.print("Endereço: ");
         String endereco = scanner.nextLine();
 
-        System.out.print("Distância (km): ");
+        System.out.print("Distância em km: ");
         int distancia = scanner.nextInt();
 
-        System.out.print("Peso (kg): ");
+        System.out.print("Peso em kg: ");
         double peso = scanner.nextDouble();
 
-        TipoEntrega tipo = escolherTipoEntrega();
+        scanner.nextLine();
 
-        /*
-         * Aqui você precisaria criar/receber os produtos
-         * do pedido.
-         *
-         * Por enquanto:
-         */
-        Produto[] produtos = new Produto[0];
+        List<Produto> produtos = cadastrarProdutos();
 
-        pedidos[quantidadePedidos] = new Pedido(
+        TipoEntrega tipoEntrega = escolherTipoEntrega();
+
+        Pedido pedido = new Pedido(
                 produtos,
                 destinatario,
                 endereco,
                 distancia,
                 peso,
-                tipo
+                tipoEntrega
         );
 
-        quantidadePedidos++;
+        pedidos.add(pedido);
 
         System.out.println("Pedido cadastrado com sucesso!");
     }
 
-    private static TipoEntrega escolherTipoEntrega() {
+    private List<Produto> cadastrarProdutos() {
 
-        System.out.println("\nTipo de entrega:");
+        List<Produto> produtos = new ArrayList<>();
+
+        String continuar;
+
+        do {
+            System.out.println("\n--- Novo Produto ---");
+
+            System.out.print("Nome: ");
+            String nome = scanner.nextLine();
+
+            System.out.print("Preço: ");
+            double preco = scanner.nextDouble();
+
+            scanner.nextLine();
+
+            System.out.print("Preço: ");
+            int quantidade = scanner.nextInt();
+
+            scanner.nextLine();
+
+            Produto produto = new Produto(nome, preco, quantidade);
+
+            produtos.add(produto);
+
+            System.out.print("Adicionar outro produto? (s/n): ");
+            continuar = scanner.nextLine();
+
+        } while (continuar.equalsIgnoreCase("s"));
+
+        return produtos;
+    }
+
+    private TipoEntrega escolherTipoEntrega() {
+
+        System.out.println("\n===== TIPO DE ENTREGA =====");
         System.out.println("1 - Moto");
         System.out.println("2 - Carro");
         System.out.println("3 - Retirada");
         System.out.print("Escolha: ");
 
         int opcao = scanner.nextInt();
+        scanner.nextLine();
 
         switch (opcao) {
             case 1:
@@ -131,34 +158,31 @@ public class Transportadora {
         }
     }
 
-    private static void listarPedidos() {
+    private void listarPedidos() {
 
-        if (quantidadePedidos == 0) {
+        if (pedidos.isEmpty()) {
             System.out.println("Nenhum pedido cadastrado.");
             return;
         }
 
         System.out.println("\n===== PEDIDOS =====");
 
-        for (int i = 0; i < quantidadePedidos; i++) {
+        for (int i = 0; i < pedidos.size(); i++) {
             System.out.println(
-                    "Pedido " + (i + 1)
-                            + " - "
-                            + pedidos[i]
+                    (i + 1) + " - Pedido para: "
+                            + pedidos.get(i).getDestinatario()
             );
         }
     }
 
-    private static void calcularFrete() {
+    private void calcularFrete() {
 
-        if (quantidadePedidos == 0) {
+        if (pedidos.isEmpty()) {
             System.out.println("Nenhum pedido cadastrado.");
             return;
         }
 
-        int numero = escolherPedido();
-
-        Pedido pedido = pedidos[numero];
+        Pedido pedido = selecionarPedido();
 
         System.out.printf(
                 "Frete: R$ %.2f%n",
@@ -166,29 +190,32 @@ public class Transportadora {
         );
     }
 
-    private static void imprimirResumo() {
+    private void imprimirResumo() {
 
-        if (quantidadePedidos == 0) {
+        if (pedidos.isEmpty()) {
             System.out.println("Nenhum pedido cadastrado.");
             return;
         }
 
-        int numero = escolherPedido();
+        Pedido pedido = selecionarPedido();
 
-        pedidos[numero].imprimirResumo();
+        pedido.imprimirResumo();
     }
 
-    private static int escolherPedido() {
+    private Pedido selecionarPedido() {
 
-        System.out.print("Número do pedido: ");
+        listarPedidos();
+
+        System.out.print("Escolha o pedido: ");
         int numero = scanner.nextInt();
+        scanner.nextLine();
 
-        if (numero < 1 || numero > quantidadePedidos) {
+        if (numero < 1 || numero > pedidos.size()) {
             throw new IllegalArgumentException(
                     "Pedido inválido!"
             );
         }
 
-        return numero - 1;
+        return pedidos.get(numero - 1);
     }
 }

@@ -2,17 +2,19 @@ package Questao1;
 
 import Questao1.Entregas.*;
 
+import java.util.List;
+
 class Pedido {
     private String destinatario;
     private String endereco;
     private double peso;
     private TipoEntrega tipoEntrega;
-    private Produto[] produtos;
+    private List<Produto> produtos;
     private int distanciakm;
 
     private Entrega entrega;
 
-    public Pedido(Produto[] produtos, String destinatario, String endereco,
+    public Pedido(List<Produto> produtos, String destinatario, String endereco,
                   int distanciakm, double peso, TipoEntrega tipoEntrega) {
 
         this.produtos = produtos;
@@ -68,5 +70,9 @@ class Pedido {
                         "Tipo de entrega inválido"
                 );
         }
+    }
+
+    public String getDestinatario() {
+        return this.destinatario;
     }
 }
