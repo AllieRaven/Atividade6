@@ -1,8 +1,8 @@
-import Questao1.Transportadora;
+import Questao2.SistemaResidencial;
 
 public class Main {
     public static void main(String[] args){
-        Transportadora transportadora = new Transportadora();
-        transportadora.menu();
+        SistemaResidencial sistemaResidencial = new SistemaResidencial();
+        sistemaResidencial.menu();
     }
 }
