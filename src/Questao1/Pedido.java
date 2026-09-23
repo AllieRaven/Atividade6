@@ -43,7 +43,7 @@ class Pedido {
 
     public void imprimirResumo() {
         System.out.printf(
-                "Destinatário: %-15s | Endereço: %-15s | Peso: %5.2fkg | " + "Tipo: %-18s | Frete: R$ %6.2f | Total: R$ %6.2f%n",
+                "Destinatário: %-15s | Endereço: %-15s | Peso: %5.2fkg | Tipo: %-18s | Frete: R$ %6.2f | Total: R$ %6.2f%n",
 
                 destinatario,
                 endereco,

@@ -113,7 +113,7 @@ public class Transportadora {
 
             scanner.nextLine();
 
-            System.out.print("Preço: ");
+            System.out.print("Quantidade: ");
             int quantidade = scanner.nextInt();
 
             scanner.nextLine();
