@@ -1,8 +1,9 @@
-import Questao2.SistemaResidencial;
+import Questao3.Biblioteca;
 
 public class Main {
     public static void main(String[] args){
-        SistemaResidencial sistemaResidencial = new SistemaResidencial();
-        sistemaResidencial.menu();
+        Biblioteca biblioteca = new Biblioteca();
+
+        biblioteca.menu();
     }
 }
