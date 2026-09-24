@@ -1,9 +1,8 @@
-import Questao3.Biblioteca;
+import Questao4.Empresa;
 
 public class Main {
     public static void main(String[] args){
-        Biblioteca biblioteca = new Biblioteca();
-
-        biblioteca.menu();
+        Empresa empresa = new Empresa();
+        empresa.menu();
     }
 }
